@@ -1,20 +1,21 @@
 import axios from 'axios';
-import {allFlightsURL} from '../api';
-import {flightsFromToURL} from '../api';
-import {allAirportsURL} from '../api';
-import {allAirlinesURL} from '../api';
+
+const base_url = 'https://recruitment.shippypro.com/flight-engine/api';
+const allFlightsURL = `${base_url}/flights/all`;
+const allAirportsURL = `${base_url}/airports/all`;
+const allAirlinesURL = `${base_url}/airlines/all`;
 
 // action creator
 export const loadFlights = () => async (dispatch) => {
     const auth = `${process.env.REACT_APP_SHIPPY_KEY}`;
     // fecth axios
-    const flightsData = await axios.get(allFlightsURL(), {
+    const flightsData = await axios.get(allFlightsURL, {
         headers: {
             'Authorization': auth
         },
     });
     
-    const AirportsData = await axios.get(allAirportsURL(), {
+    const AirportsData = await axios.get(allAirportsURL, {
         headers: {
             'Authorization': auth
         },
@@ -53,14 +54,13 @@ export const loadFlights = () => async (dispatch) => {
         // console.log(arrivalID);
         // console.log(departureID);
     }
-
     console.log(flights_price_order);
-
 
     dispatch({
         type: 'FETCH_FLIGHTS',
         payload: {
             allFlights: flights_price_order,
+            airports: airports,
         }
     })
 }
