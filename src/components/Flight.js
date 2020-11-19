@@ -12,11 +12,13 @@ import {useDispatch} from 'react-redux';
 const Flight = ({departure, arrival, id, price}) => {
     
     return (
-        <div className="text">
-            <h3>{departure}</h3>
-            <h3>{arrival}</h3>
-            <h3>{id}</h3>
-            <h3>{price}</h3>
+        <div className="card-flight">
+            <div className="text">
+                <h3>Partenza da: {departure}</h3>
+                <h3>Arrivo a: {arrival}</h3>
+                <h3>Id Volo: {id}</h3>
+                <h3>Prezzo biglietto: {price}€</h3>
+            </div>
         </div>
     )
 }

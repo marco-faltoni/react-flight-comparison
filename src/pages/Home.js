@@ -20,16 +20,19 @@ function Home() {
     },[dispatch]);
     // getting back the data
     const {allFlights} = useSelector((store) => store.flights);
-    console.log(allFlights);
+    // console.log(allFlights);
 
     return (
-        <div>
-            <h2>home</h2>
-            {allFlights.map((flight)=> {
-                return <Flight departure={flight.departureAirportId} arrival={flight.arrivalAirportId} id={flight.id} price={flight.price} key={flight.id} /> 
-            })}
+        <div className='flights-container'>
+            <h2>Voli Diretti piu economici</h2>
+            <div className="card-container">
+                {allFlights.map((flight)=> {
+                    return <Flight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} /> 
+                })}
+            </div>
         </div>
     );
 }
+
 
 export default Home;
