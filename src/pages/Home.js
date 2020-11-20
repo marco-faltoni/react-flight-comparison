@@ -44,33 +44,38 @@ function Home() {
         if (selectValue === '' && selectValue2 === '') {
             alert.error('Select the airports!')
         } else if(selectValue === '') {
-            alert.error('Select the departure airport!')
+            alert.error('Select the departure airport!');
+            setSelectValue2('');
+            document.querySelector('.two').selectedIndex = 0;
         } else if(selectValue2 === '') {
-            alert.error('Select the arrival airport!')
+            alert.error('Select the arrival airport!');
+            setSelectValue('');
+            document.querySelector('.one').selectedIndex = 0;
         } else {
             dispatch(fetchSelected(selectValue, selectValue2));
-            // var paragraph = document.querySelector(".value-search");
-            // paragraph.textContent += `- da:${selectValue} a:${selectValue2}`;
             setSelectValue('');
             setSelectValue2('');
             document.querySelector('.one').selectedIndex = 0;
             document.querySelector('.two').selectedIndex = 0;
         }
         // console.log(selectValue, selectValue2);
-        
     }
-
 
     // getting back the data
     const {allFlights, airports} = useSelector((store) => store.flights);
     const {flightsSearched} = useSelector((store) => store.searched);
     let directFlight = [];
     let stopOversFlight = [];
+    let removeItem = [];
+    let lastItem = [];
 
-    if (flightsSearched.length == 1) {
+    if (flightsSearched.length === 1) {
         directFlight = flightsSearched;
+        console.log(directFlight);
     } else if (flightsSearched.length > 1) {
         stopOversFlight = flightsSearched;
+        removeItem = [...flightsSearched];
+        lastItem = removeItem.pop();
     }
 
 
@@ -79,13 +84,13 @@ function Home() {
             <div className="select">
                 <form onSubmit={submitSearch} className="search">
                     <select onChange={selectHandler} className="custom-select one">
-                        <option selected>Scegli l'aereoporto di partenza - All</option>
+                        <option selected>Scegli l'aereoporto di partenza</option>
                         {airports.map((airport) => {
                             return <option value={airport.codeIata} key={airport.id} >{airport.codeIata}</option>
                         })}
                     </select>
-                        <select onChange={selectHandler2} className="custom-select two">
-                        <option selected data ="tutto">Scegli l'aereoporto di arrivo - All</option>
+                    <select onChange={selectHandler2} className="custom-select two">
+                        <option selected>Scegli l'aereoporto di arrivo</option>
                         {airports.map((airport) => {
                             return <option value={airport.codeIata} key={airport.id} >{airport.codeIata}</option>
                         })}
@@ -96,7 +101,7 @@ function Home() {
 
             {directFlight.length ? (
                 <div className='searched'>
-                    <h2>Voli Diretti <span className='value-search'></span></h2>
+                    <h2>Volo Diretto - <span>da: {directFlight[0].departureAirportId} a: {directFlight[0].arrivalAirportId} </span></h2>
                     <div className="card-container">
                         {flightsSearched.map((flight)=> {
                             return <SearchedFlight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} /> 
@@ -107,7 +112,7 @@ function Home() {
 
             {stopOversFlight.length ? (
                 <div className='searched'>
-                    <h2>Voli Con Scali<span className='value-search'></span></h2>
+                    <h2>Volo Con <span>{stopOversFlight.length - 1}</span> Scali da: <span>{stopOversFlight[0].departureAirportId}</span> a: <span>{ removeItem.length ? (lastItem.arrivalAirportId) : ''}</span></h2>
                     <div className="card-container">
                         {flightsSearched.map((flight)=> {
                             return <SearchedFlight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} /> 

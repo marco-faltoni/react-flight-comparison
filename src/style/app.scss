@@ -22,9 +22,10 @@ body {
 }
 
 h2 {
-    font-size: 2.5rem;
-    font-family: 'Abril Fatface', cursive;
-    font-weight: lighter;
+    font-size: 2.3rem;
+    font-family: 'Lora', serif;
+    font-weight: 600;
+    font-style: italic;
     color: #333;
     @media (max-width: 600px) {
         font-size: 2rem;

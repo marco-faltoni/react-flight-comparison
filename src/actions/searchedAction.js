@@ -6,7 +6,6 @@ export const fetchSelected = (departure, arrival) => async (dispatch) => {
     const flightsFromToURL = `${base_url}/flights/from/${departure}/to/${arrival}`;
 
     const auth = `${process.env.REACT_APP_SHIPPY_KEY}`;
-    // console.log(auth);
     console.log(departure, arrival);
 
     // fecth axios
@@ -44,9 +43,9 @@ export const fetchSelected = (departure, arrival) => async (dispatch) => {
         });
         // console.log(arrivalID);
         // console.log(departureID);
-        console.log(flightsSelected);
     }
 
+    console.log(flightsSelected);
 
     dispatch({
         type: 'GET_SELECTED',

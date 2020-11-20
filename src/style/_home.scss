@@ -3,9 +3,20 @@
     padding-bottom: 4rem;
     h2 {
         padding: 5rem 0rem;
+        span {
+            font-style: initial;
+            font-weight: 600;
+            text-decoration: none;
+            background: linear-gradient(135deg, rgba(168,230,217,1) 7%, rgba(165,121,235,1) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -webkit-box-decoration-break: clone;
+            box-decoration-break: clone;
+            
+        }
     }
     .card-container {
-        min-height: 80vh;
+        min-height: 60vh;
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
         grid-column-gap: 2rem;
