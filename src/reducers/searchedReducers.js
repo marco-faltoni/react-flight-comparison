@@ -15,7 +15,12 @@ const detailsReducer = (state=initState, action) => {
             return{
                 ...state,
                 isLoading: true,
-            }
+            };
+        case "CLEAR_SEARCHED":
+            return{
+                ...state,
+                flightsSearched: [],
+            };
                 
         default:
             return {...state};

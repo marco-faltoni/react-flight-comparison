@@ -1,18 +1,14 @@
 import React from 'react';
 // Redux
 import {useDispatch} from 'react-redux';
-// import {loadDetails} from '../actions/detailAction';
-// // style and animation
-// import styled from 'styled-components';
-// import {motion} from 'framer-motion';
-// import {slideUp} from '../animation';
-// import {Link} from 'react-router-dom';
-// import {resizeImg} from '../util';
+// style and animation
+import {motion} from 'framer-motion';
+import {slideUp} from '../animation';
 
 const Flight = ({departure, arrival, id, price, airline}) => {
     
     return (
-        <div className="card-flight">
+        <motion.div layoutId={id} className="card-flight" variants={slideUp} initial='hidden' animate='show'>
             <div className="text one">
                 <h3>Company: <br/> <span><i>{airline}</i></span></h3>
                 <h3>Flight ID: <br/> <i>{id}</i> </h3>
@@ -25,7 +21,7 @@ const Flight = ({departure, arrival, id, price, airline}) => {
                 <h3>Price:</h3> 
                 <h3> <span><i>€{price}</i></span></h3>
             </div>
-        </div>
+        </motion.div>
     )
 }
 

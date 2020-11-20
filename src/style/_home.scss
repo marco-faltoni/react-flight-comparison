@@ -43,9 +43,10 @@
                 -webkit-text-fill-color: transparent;
                 -webkit-box-decoration-break: clone;
                 box-decoration-break: clone;
+                cursor: pointer;
             }
             .three {
-                background: linear-gradient(135deg, #a8e6d9 7%, #a579eb 100%);
+                background: linear-gradient(135deg, #c6f4ea 7%, #9e92db 100%);
                 border-radius: 0.5rem;
                 h3 {
                     color: whitesmoke;

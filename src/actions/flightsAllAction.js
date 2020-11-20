@@ -30,7 +30,7 @@ export const loadFlights = () => async (dispatch) => {
     const flights_price_order = flightsData.data.data;
     const airports =  AirportsData.data.data;
     const airlines =  AirlinesData.data.data;
-    // console.log(airlines);
+
 
     // ordino per prezzo ascendente i dati che ho ricevuto
     flights_price_order.sort((a, b) => {
@@ -43,20 +43,30 @@ export const loadFlights = () => async (dispatch) => {
         return 0;
     });
 
+    let flights_price_low = [];
+    // console.log(airlines);
+
+    function checkPrice(flight) {
+        return flight.price <= 1000;
+    }
+
+    flights_price_low = flights_price_order.filter(checkPrice);
+    console.log(flights_price_low);
+
     let arrivalID;
     let departureID;
     let airlineID;
     
     // sostituisco gli id di arrivo e partenza con i corrispondenti nomi in stringa
-    for (let i = 0; i < flights_price_order.length; i++) {
-        arrivalID = flights_price_order[i].arrivalAirportId;
-        departureID = flights_price_order[i].departureAirportId;
+    for (let i = 0; i < flights_price_low.length; i++) {
+        arrivalID = flights_price_low[i].arrivalAirportId;
+        departureID = flights_price_low[i].departureAirportId;
         airports.map((airport) => {
             if (airport.id === departureID) {
-                return flights_price_order[i].departureAirportId = airport.codeIata
+                return flights_price_low[i].departureAirportId = airport.codeIata
             }
             if (airport.id === arrivalID) {
-                return flights_price_order[i].arrivalAirportId = airport.codeIata
+                return flights_price_low[i].arrivalAirportId = airport.codeIata
             }
         });
         // console.log(arrivalID);
@@ -64,21 +74,21 @@ export const loadFlights = () => async (dispatch) => {
     }
     
     // sostituisco gli id di delle compagnie con i corrispondenti nomi in stringa
-    for (let i = 0; i < flights_price_order.length; i++) {
-        airlineID = flights_price_order[i].airlineId;
+    for (let i = 0; i < flights_price_low.length; i++) {
+        airlineID = flights_price_low[i].airlineId;
         airlines.map((airline) => {
             if (airlineID === airline.id) {
-                return flights_price_order[i].airlineId = airline.name;
+                return flights_price_low[i].airlineId = airline.name;
             }
         });
     }
 
-    console.log(flights_price_order);
+    // console.log(flights_price_order);
 
     dispatch({
         type: 'FETCH_FLIGHTS',
         payload: {
-            allFlights: flights_price_order,
+            allFlights: flights_price_low,
             airports: airports,
         }
     })

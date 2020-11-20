@@ -8,11 +8,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {loadFlights} from '../actions/flightsAllAction';
 import {fetchSelected} from '../actions/searchedAction';
 import { useAlert } from 'react-alert'
-// // style and animation
-// import styled from 'styled-components';
-// import {motion, AnimatePresence, AnimateSharedLayout} from 'framer-motion';
-// import {fadeIn} from '../animation';
-// import {useLocation} from 'react-router-dom';
+// style and animation
+import {motion, AnimatePresence, AnimateSharedLayout} from 'framer-motion';
+import {fadeIn} from '../animation';
 
 function Home() {
     const [selectValue, setSelectValue] = useState('');
@@ -20,7 +18,7 @@ function Home() {
 
     const alert = useAlert()
     
-    // fecth agmes
+    // fecth flights
     const dispatch = useDispatch();
     useEffect(()=> {
         dispatch(loadFlights());
@@ -61,6 +59,10 @@ function Home() {
         // console.log(selectValue, selectValue2);
     }
 
+    const clearSearch = () => {
+        dispatch({type: "CLEAR_SEARCHED"});
+    }
+
     // getting back the data
     const {allFlights, airports} = useSelector((store) => store.flights);
     const {flightsSearched} = useSelector((store) => store.searched);
@@ -81,52 +83,59 @@ function Home() {
 
     return (
         <div className='flights-container'>
-            <div className="select">
-                <form onSubmit={submitSearch} className="search">
-                    <select onChange={selectHandler} className="custom-select one">
-                        <option selected>choose the departure airport</option>
-                        {airports.map((airport) => {
-                            return <option value={airport.codeIata} key={airport.id} >{airport.codeIata}</option>
-                        })}
-                    </select>
-                    <select onChange={selectHandler2} className="custom-select two">
-                        <option selected>choose the arrival airport</option>
-                        {airports.map((airport) => {
-                            return <option value={airport.codeIata} key={airport.id} >{airport.codeIata}</option>
-                        })}
-                    </select>
-                    <button type='submit'>Go</button>
-                </form>
-            </div>
+            <AnimateSharedLayout type="crossfade">
+                <motion.div className="select" variants={fadeIn} initial='hidden' animate='show'>
+                    <form onSubmit={submitSearch} className="search">
+                        <select onChange={selectHandler} className="custom-select one">
+                            <option>choose the departure airport</option>
+                            {airports.map((airport) => {
+                                return <option value={airport.codeIata} key={airport.id} >{airport.codeIata}</option>
+                            })}
+                        </select>
+                        <select onChange={selectHandler2} className="custom-select two">
+                            <option selected>choose the arrival airport</option>
+                            {airports.map((airport) => {
+                                return <option value={airport.codeIata} key={airport.id} >{airport.codeIata}</option>
+                            })}
+                        </select>
+                        <button type='submit'>Go</button>
+                        <button type='button' onClick={clearSearch}>Clear</button>
+                    </form>
+                    
+                </motion.div>
+                
+                    {directFlight.length ? (
+                        <div className='searched'>
+                            <motion.h2 variants={fadeIn} initial='hidden' animate='show'>Flight with no Stopover: <span>{directFlight[0].departureAirportId}</span> a: <span>{directFlight[0].arrivalAirportId}</span></motion.h2>
+                            <div className="card-container">
+                            <AnimatePresence>
+                                {flightsSearched.map((flight)=> {
+                                    return <SearchedFlight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId}/> 
+                                })}
+                            </AnimatePresence>
+                            </div>
+                        </div>
+                    ): ''}
 
-            {directFlight.length ? (
-                <div className='searched'>
-                    <h2>Flight with no Stopover: <span>{directFlight[0].departureAirportId}</span> a: <span>{directFlight[0].arrivalAirportId}</span></h2>
-                    <div className="card-container">
-                        {flightsSearched.map((flight)=> {
-                            return <SearchedFlight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId}/> 
-                        })}
-                    </div>
+                    {stopOversFlight.length ? (
+                        <div className='searched'>
+                            <motion.h2 variants={fadeIn} initial='hidden' animate='show'>Flight with <span>{stopOversFlight.length - 1}</span> Stopovers from: <span>{stopOversFlight[0].departureAirportId}</span> to: <span>{ removeItem.length ? (lastItem.arrivalAirportId) : ''}</span></motion.h2>
+                            <div className="card-container">
+                                {flightsSearched.map((flight)=> {
+                                    return <SearchedFlight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId} /> 
+                                })}
+                            </div>
+                        </div>
+                    ): ''}
+                
+
+                <motion.h2 variants={fadeIn} initial='hidden' animate='show'>Most Convenient Flights under 1000€ with no Stopovers</motion.h2>
+                <div className="card-container">
+                    {allFlights.map((flight)=> {
+                        return <Flight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId} /> 
+                    })}
                 </div>
-            ): ''}
-
-            {stopOversFlight.length ? (
-                <div className='searched'>
-                    <h2>Flights with <span>{stopOversFlight.length - 1}</span> Stopovers from: <span>{stopOversFlight[0].departureAirportId}</span> to: <span>{ removeItem.length ? (lastItem.arrivalAirportId) : ''}</span></h2>
-                    <div className="card-container">
-                        {flightsSearched.map((flight)=> {
-                            return <SearchedFlight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId} /> 
-                        })}
-                    </div>
-                </div>
-            ): ''}
-
-            <h2>Most Convenient no Stopovers Flights</h2>
-            <div className="card-container">
-                {allFlights.map((flight)=> {
-                    return <Flight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId} /> 
-                })}
-            </div>
+            </AnimateSharedLayout>
         </div>
     );
 }
