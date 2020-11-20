@@ -84,13 +84,13 @@ function Home() {
             <div className="select">
                 <form onSubmit={submitSearch} className="search">
                     <select onChange={selectHandler} className="custom-select one">
-                        <option selected>Scegli l'aereoporto di partenza</option>
+                        <option selected>choose the departure airport</option>
                         {airports.map((airport) => {
                             return <option value={airport.codeIata} key={airport.id} >{airport.codeIata}</option>
                         })}
                     </select>
                     <select onChange={selectHandler2} className="custom-select two">
-                        <option selected>Scegli l'aereoporto di arrivo</option>
+                        <option selected>choose the arrival airport</option>
                         {airports.map((airport) => {
                             return <option value={airport.codeIata} key={airport.id} >{airport.codeIata}</option>
                         })}
@@ -101,10 +101,10 @@ function Home() {
 
             {directFlight.length ? (
                 <div className='searched'>
-                    <h2>Volo Diretto - <span>da: {directFlight[0].departureAirportId} a: {directFlight[0].arrivalAirportId} </span></h2>
+                    <h2>Flight with no Stopover: <span>{directFlight[0].departureAirportId}</span> a: <span>{directFlight[0].arrivalAirportId}</span></h2>
                     <div className="card-container">
                         {flightsSearched.map((flight)=> {
-                            return <SearchedFlight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} /> 
+                            return <SearchedFlight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId}/> 
                         })}
                     </div>
                 </div>
@@ -112,19 +112,19 @@ function Home() {
 
             {stopOversFlight.length ? (
                 <div className='searched'>
-                    <h2>Volo Con <span>{stopOversFlight.length - 1}</span> Scali da: <span>{stopOversFlight[0].departureAirportId}</span> a: <span>{ removeItem.length ? (lastItem.arrivalAirportId) : ''}</span></h2>
+                    <h2>Flights with <span>{stopOversFlight.length - 1}</span> Stopovers from: <span>{stopOversFlight[0].departureAirportId}</span> to: <span>{ removeItem.length ? (lastItem.arrivalAirportId) : ''}</span></h2>
                     <div className="card-container">
                         {flightsSearched.map((flight)=> {
-                            return <SearchedFlight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} /> 
+                            return <SearchedFlight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId} /> 
                         })}
                     </div>
                 </div>
             ): ''}
 
-            <h2>Voli Diretti piu economici</h2>
+            <h2>Most Convenient no Stopovers Flights</h2>
             <div className="card-container">
                 {allFlights.map((flight)=> {
-                    return <Flight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} /> 
+                    return <Flight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId} /> 
                 })}
             </div>
         </div>

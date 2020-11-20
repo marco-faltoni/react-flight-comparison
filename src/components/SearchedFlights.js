@@ -9,20 +9,27 @@ import {useSelector} from 'react-redux';
 // import {Link} from 'react-router-dom';
 // import {resizeImg} from '../util';
 
-const SearchedFlight = ({departure, arrival, id, price}) => {
+const SearchedFlight = ({departure, arrival, id, price, airline}) => {
 
     const {isLoading} = useSelector((store) => store.searched);
     
     return (
         <>
         {!isLoading && (
+            
             <div className="card-flight">
-            <div className="text">
-                <h3>Partenza da: <i>{departure}</i> </h3>
-                <h3>Arrivo a: <i>{arrival}</i> </h3>
-                <h3>Id Volo: <i>{id}</i> </h3>
-                <h3>Prezzo biglietto: <i>{price}€</i></h3>
-            </div>
+                <div className="text one">
+                    <h3>Company: <br/> <span><i>{airline}</i></span></h3>
+                    <h3>Flight ID: <br/> <i>{id}</i> </h3>
+                </div>
+                <div className="text two">
+                    <h3>from: <br/> <span>{departure}</span></h3>
+                    <h3>to: <br/> <span>{arrival}</span></h3>
+                </div>
+                <div className="text three">
+                    <h3>Price:</h3> 
+                    <h3> <span><i>€{price}</i></span></h3>
+                </div>
             </div>
         )}
         </>

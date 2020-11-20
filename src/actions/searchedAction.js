@@ -1,8 +1,10 @@
 import axios from 'axios';
 const base_url = 'https://recruitment.shippypro.com/flight-engine/api';
 const allAirportsURL = `${base_url}/airports/all`;
+const allAirlinesURL = `${base_url}/airlines/all`;
 
 export const fetchSelected = (departure, arrival) => async (dispatch) => {
+
     const flightsFromToURL = `${base_url}/flights/from/${departure}/to/${arrival}`;
 
     const auth = `${process.env.REACT_APP_SHIPPY_KEY}`;
@@ -22,12 +24,19 @@ export const fetchSelected = (departure, arrival) => async (dispatch) => {
         },
     });
 
+    const AirlinesData = await axios.get(allAirlinesURL, {
+        headers: {
+            'Authorization': auth
+        },
+    });
+
     const flightsSelected = selectedAirports.data.data;
     const airports =  AirportsData.data.data;
-    
+    const airlines =  AirlinesData.data.data;
 
     let arrivalID;
     let departureID;
+    let airlineID;
     
     // sostituisco gli id di arrivo e partenza con i corrispondenti nomi in stringa
     for (let i = 0; i < flightsSelected.length; i++) {
@@ -44,6 +53,16 @@ export const fetchSelected = (departure, arrival) => async (dispatch) => {
         // console.log(arrivalID);
         // console.log(departureID);
     }
+
+    // sostituisco gli id di delle compagnie con i corrispondenti nomi in stringa
+    for (let i = 0; i < flightsSelected.length; i++) {
+        airlineID = flightsSelected[i].airlineId;
+        airlines.map((airline) => {
+            if (airlineID === airline.id) {
+                return flightsSelected[i].airlineId = airline.name;
+            }
+        });
+    }    
 
     console.log(flightsSelected);
 

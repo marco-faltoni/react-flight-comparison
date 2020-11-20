@@ -21,9 +21,16 @@ export const loadFlights = () => async (dispatch) => {
         },
     });
 
+    const AirlinesData = await axios.get(allAirlinesURL, {
+        headers: {
+            'Authorization': auth
+        },
+    });
+
     const flights_price_order = flightsData.data.data;
     const airports =  AirportsData.data.data;
-    // console.log(airports);
+    const airlines =  AirlinesData.data.data;
+    // console.log(airlines);
 
     // ordino per prezzo ascendente i dati che ho ricevuto
     flights_price_order.sort((a, b) => {
@@ -38,6 +45,7 @@ export const loadFlights = () => async (dispatch) => {
 
     let arrivalID;
     let departureID;
+    let airlineID;
     
     // sostituisco gli id di arrivo e partenza con i corrispondenti nomi in stringa
     for (let i = 0; i < flights_price_order.length; i++) {
@@ -54,6 +62,17 @@ export const loadFlights = () => async (dispatch) => {
         // console.log(arrivalID);
         // console.log(departureID);
     }
+    
+    // sostituisco gli id di delle compagnie con i corrispondenti nomi in stringa
+    for (let i = 0; i < flights_price_order.length; i++) {
+        airlineID = flights_price_order[i].airlineId;
+        airlines.map((airline) => {
+            if (airlineID === airline.id) {
+                return flights_price_order[i].airlineId = airline.name;
+            }
+        });
+    }
+
     console.log(flights_price_order);
 
     dispatch({
