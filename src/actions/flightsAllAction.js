@@ -14,13 +14,13 @@ export const loadFlights = () => async (dispatch) => {
             'Authorization': auth
         },
     });
-    
+    // fecth axios for airports
     const AirportsData = await axios.get(allAirportsURL, {
         headers: {
             'Authorization': auth
         },
     });
-
+    // fecth axios for airlines
     const AirlinesData = await axios.get(allAirlinesURL, {
         headers: {
             'Authorization': auth
@@ -45,7 +45,7 @@ export const loadFlights = () => async (dispatch) => {
 
     let flights_price_low = [];
     // console.log(airlines);
-
+    // filtro i risultati e restituisco solo quelli sotto i 1000
     function checkPrice(flight) {
         return flight.price <= 1000;
     }
@@ -84,7 +84,7 @@ export const loadFlights = () => async (dispatch) => {
     }
 
     // console.log(flights_price_order);
-
+    // faccio partire l'action
     dispatch({
         type: 'FETCH_FLIGHTS',
         payload: {

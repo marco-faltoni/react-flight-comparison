@@ -19,26 +19,32 @@ function Home() {
     // catching the location
     const location = useLocation();
     // console.log(location);
+
+    // return the flight id
     const pathID = location.pathname.split('/')[2];
     // console.log(pathID);
 
+    // using states to catch the values of the options
     const [selectValue, setSelectValue] = useState('');
     const [selectValue2, setSelectValue2] = useState('');
     const [show, setShow] = useState(false);
     const [show2, setShow2] = useState(false);
+
+    // alerts to show user feedbacks
     const alert = useAlert();
     const MiddleAlert = useAlert(MiddleAlertContext)
     
-    // fecth flights
+    // for fecth flights
     const dispatch = useDispatch();
+    // using useEffect to distapch and loading the initial data
     useEffect(()=> {
         dispatch(loadFlights());
         setTimeout(() => {
             MiddleAlert.show(`Click on the airport's name to see the map! 😎🌍 `)
         }, 2500);
-        
     },[dispatch]);
 
+    // setting the values for the searched action
     const selectHandler = (e) => {
         if (e.target.value.length === 3) {
             setSelectValue(e.target.value);
@@ -52,6 +58,7 @@ function Home() {
         }
     }
 
+    // control check before submit the request to API
     const submitSearch = async (e) => {
         e.preventDefault();
         if (selectValue === '' && selectValue2 === '') {
@@ -74,6 +81,7 @@ function Home() {
         // console.log(selectValue, selectValue2);
     }
 
+    // clear the research and go back to the initial state
     const clearSearch = () => {
         dispatch({type: "CLEAR_SEARCHED"});
     }
@@ -86,6 +94,7 @@ function Home() {
     let removeItem = [];
     let lastItem = [];
 
+    // if the results it's just one item then it's a direct flight, else with stepovers
     if (flightsSearched.length === 1) {
         directFlight = flightsSearched;
         console.log(directFlight);
@@ -99,25 +108,28 @@ function Home() {
     return (
         <div className='flights-container'>
             <AnimateSharedLayout type="crossfade">
-
                 <AnimatePresence> {pathID && <MapDetails show={show} setShow={setShow} pathID={pathID}/>}  </AnimatePresence>
                 <AnimatePresence> {pathID && <MapDetails2 show={show2} setShow={setShow2} pathID={pathID}/>}  </AnimatePresence>
                 <motion.div className="select" variants={fadeIn} initial='hidden' animate='show'>
                     <form onSubmit={submitSearch} className="search">
-                        <select onChange={selectHandler} className="custom-select one">
-                            <option>choose the departure airport</option>
-                            {airports.map((airport) => {
-                                return <option value={airport.codeIata} key={airport.id} >{airport.codeIata}</option>
-                            })}
-                        </select>
-                        <select onChange={selectHandler2} className="custom-select two">
-                            <option>choose the arrival airport</option>
-                            {airports.map((airport) => {
-                                return <option value={airport.codeIata} key={airport.id} >{airport.codeIata}</option>
-                            })}
-                        </select>
-                        <button type='submit'>Go</button>
-                        <button type='button' onClick={clearSearch}>Clear</button>
+                        <div className="select-container">
+                            <select onChange={selectHandler} className="custom-select one">
+                                <option>choose the departure airport</option>
+                                {airports.map((airport) => {
+                                    return <option value={airport.codeIata} key={airport.id} >{airport.codeIata}</option>
+                                })}
+                            </select>
+                            <select onChange={selectHandler2} className="custom-select two">
+                                <option>choose the arrival airport</option>
+                                {airports.map((airport) => {
+                                    return <option value={airport.codeIata} key={airport.id} >{airport.codeIata}</option>
+                                })}
+                            </select>
+                        </div>
+                        <div className="btn-container">
+                            <button type='submit'>Go</button>
+                            <button type='button' onClick={clearSearch}>Clear</button>
+                        </div>
                     </form>
                 </motion.div>
                 

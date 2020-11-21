@@ -9,6 +9,7 @@ import "./style/app.scss";
 // import components
 import Home from './pages/Home';
 
+// second alert
 export const MiddleAlertContext = createContext()
 
 // optional configuration for alerts
@@ -28,7 +29,7 @@ function App() {
       <AlertProvider
         template={AlertTemplate}
         position={positions.TOP_CENTER}
-        timeout= {4500}
+        timeout= {5000}
         context={MiddleAlertContext}
       >
         <div className="App">

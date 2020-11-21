@@ -8,9 +8,9 @@ import {slideUp} from '../animation';
 import {Link} from 'react-router-dom';
 
 const Flight = ({departure, arrival, id, price, airline, show, setShow}) => {
-
+    // for matching the string id in map
     const idToString = id.toString();
-
+    // for fetch the searched flights
     const dispatch = useDispatch();
 
     // getting back the data
@@ -21,7 +21,7 @@ const Flight = ({departure, arrival, id, price, airline, show, setShow}) => {
         document.body.style.overflow = 'hidden';
         const a = [...airports];
         const b = e.target.innerText;
-        const airportSelected = a.filter((airport) => airport.codeIata == b );
+        const airportSelected = a.filter((airport) => airport.codeIata === b );
         dispatch(setAirport(airportSelected));
     }
     

@@ -17,7 +17,7 @@ export const MapDetails = ({pathID, show, setShow}) => {
     const exitHandler = (e) => {
         const element = e.target;
         // console.log(element);
-        
+        // go back to main page
         if (element.classList.contains('shadow')) {
             document.body.style.overflow = 'auto';
             setShow(!show);
@@ -52,6 +52,7 @@ export const MapDetails = ({pathID, show, setShow}) => {
     )
 }
 
+// for animation issue i have to duplicate the function specific for searchedFlight
 export const MapDetails2 = ({pathID, show, setShow}) => {
     // getting back the data
     const {selectedAirport} = useSelector((store) => store.flights);
