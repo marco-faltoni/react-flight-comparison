@@ -48,6 +48,10 @@
             .three {
                 background: linear-gradient(135deg, #c6f4ea 7%, #9e92db 100%);
                 border-radius: 0.5rem;
+                box-shadow: inset 3px 0px 3px -1px rgba(0,0,0,0.18);
+                -webkit-box-shadow: inset 3px 0px 3px -1px rgba(0,0,0,0.18); 
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
                 h3 {
                     color: whitesmoke;
                 }
@@ -61,6 +65,45 @@
             .two h3 span, .three h3 span {
                 font-size: 1.7rem;
             }
+        }
+    }
+}
+
+.shadow {
+    width: 100%;
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index:10;
+    .detail {
+        padding: 1rem;
+        box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+        width: 40%;
+        height: 50%;
+        border-radius: 0.5rem;
+        margin: 4rem 0rem;
+        background: rgb(255, 255, 255);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: black;
+        z-index:10;
+        overflow: hidden;
+        .map-cont {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.3rem;
+        }
+        @media (max-width: 900px) {
+            padding: 2rem 3rem;
+        }
+        @media (max-width: 600px) {
+            padding: 1rem 1rem;
+            width: 90%;
+            left:5%;
         }
     }
 }
