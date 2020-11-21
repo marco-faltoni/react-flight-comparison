@@ -30,7 +30,7 @@ export const loadFlights = () => async (dispatch) => {
     const flights_price_order = flightsData.data.data;
     const airports =  AirportsData.data.data;
     const airlines =  AirlinesData.data.data;
-
+    console.log(airports);
 
     // ordino per prezzo ascendente i dati che ho ricevuto
     flights_price_order.sort((a, b) => {
@@ -90,6 +90,15 @@ export const loadFlights = () => async (dispatch) => {
         payload: {
             allFlights: flights_price_low,
             airports: airports,
+        }
+    })
+}
+
+export const setAirport = (name) => (dispatch) => {
+    dispatch({
+        type: 'SET_AIRPORT',
+        payload: {
+            selectedAirport: name,
         }
     })
 }

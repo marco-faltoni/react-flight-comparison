@@ -1,27 +1,42 @@
 import React, {useEffect, useState} from 'react';
 // components
 import Flight from '../components/Flight';
+import {MapDetails, MapDetails2} from '../components/Map';
 import SearchedFlight from '../components/SearchedFlights';
 // Redux
 import {useDispatch, useSelector} from 'react-redux';
 // actions
 import {loadFlights} from '../actions/flightsAllAction';
 import {fetchSelected} from '../actions/searchedAction';
-import { useAlert } from 'react-alert'
+import { useAlert } from 'react-alert';
+import { MiddleAlertContext } from '../App';
 // style and animation
 import {motion, AnimatePresence, AnimateSharedLayout} from 'framer-motion';
 import {fadeIn} from '../animation';
+import {useLocation} from 'react-router-dom';
 
 function Home() {
+    // catching the location
+    const location = useLocation();
+    // console.log(location);
+    const pathID = location.pathname.split('/')[2];
+    // console.log(pathID);
+
     const [selectValue, setSelectValue] = useState('');
     const [selectValue2, setSelectValue2] = useState('');
-
-    const alert = useAlert()
+    const [show, setShow] = useState(false);
+    const [show2, setShow2] = useState(false);
+    const alert = useAlert();
+    const MiddleAlert = useAlert(MiddleAlertContext)
     
     // fecth flights
     const dispatch = useDispatch();
     useEffect(()=> {
         dispatch(loadFlights());
+        setTimeout(() => {
+            MiddleAlert.show(`Click on the airport's name to see the map! 😎🌍 `)
+        }, 2500);
+        
     },[dispatch]);
 
     const selectHandler = (e) => {
@@ -40,13 +55,13 @@ function Home() {
     const submitSearch = async (e) => {
         e.preventDefault();
         if (selectValue === '' && selectValue2 === '') {
-            alert.error('Select the airports!')
+            alert.error('Select the airports! ✈')
         } else if(selectValue === '') {
-            alert.error('Select the departure airport!');
+            alert.error('Select the departure airport! 🛫');
             setSelectValue2('');
             document.querySelector('.two').selectedIndex = 0;
         } else if(selectValue2 === '') {
-            alert.error('Select the arrival airport!');
+            alert.error('Select the arrival airport! 🛬');
             setSelectValue('');
             document.querySelector('.one').selectedIndex = 0;
         } else {
@@ -84,6 +99,9 @@ function Home() {
     return (
         <div className='flights-container'>
             <AnimateSharedLayout type="crossfade">
+
+                <AnimatePresence> {pathID && <MapDetails show={show} setShow={setShow} pathID={pathID}/>}  </AnimatePresence>
+                <AnimatePresence> {pathID && <MapDetails2 show={show2} setShow={setShow2} pathID={pathID}/>}  </AnimatePresence>
                 <motion.div className="select" variants={fadeIn} initial='hidden' animate='show'>
                     <form onSubmit={submitSearch} className="search">
                         <select onChange={selectHandler} className="custom-select one">
@@ -93,7 +111,7 @@ function Home() {
                             })}
                         </select>
                         <select onChange={selectHandler2} className="custom-select two">
-                            <option selected>choose the arrival airport</option>
+                            <option>choose the arrival airport</option>
                             {airports.map((airport) => {
                                 return <option value={airport.codeIata} key={airport.id} >{airport.codeIata}</option>
                             })}
@@ -101,40 +119,38 @@ function Home() {
                         <button type='submit'>Go</button>
                         <button type='button' onClick={clearSearch}>Clear</button>
                     </form>
-                    
                 </motion.div>
                 
-                    {directFlight.length ? (
-                        <div className='searched'>
-                            <motion.h2 variants={fadeIn} initial='hidden' animate='show'>Flight with no Stopover: <span>{directFlight[0].departureAirportId}</span> a: <span>{directFlight[0].arrivalAirportId}</span></motion.h2>
-                            <div className="card-container">
-                            <AnimatePresence>
-                                {flightsSearched.map((flight)=> {
-                                    return <SearchedFlight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId}/> 
-                                })}
-                            </AnimatePresence>
-                            </div>
+                {directFlight.length ? (
+                    <motion.div className='searched'>
+                        <motion.h2 variants={fadeIn} initial='hidden' animate='show'>Flight with no Stopover: <span>{directFlight[0].departureAirportId}</span> a: <span>{directFlight[0].arrivalAirportId}</span></motion.h2>
+                        <div className="card-container">
+                        <AnimatePresence>
+                            {flightsSearched.map((flight)=> {
+                                return <SearchedFlight show={show2} setShow={setShow2} arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId}/> 
+                            })}
+                        </AnimatePresence>
                         </div>
-                    ): ''}
+                    </motion.div>
+                ): ''}
 
-                    {stopOversFlight.length ? (
-                        <div className='searched'>
-                            <motion.h2 variants={fadeIn} initial='hidden' animate='show'>Flight with <span>{stopOversFlight.length - 1}</span> Stopovers from: <span>{stopOversFlight[0].departureAirportId}</span> to: <span>{ removeItem.length ? (lastItem.arrivalAirportId) : ''}</span></motion.h2>
-                            <div className="card-container">
-                                {flightsSearched.map((flight)=> {
-                                    return <SearchedFlight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId} /> 
-                                })}
-                            </div>
+                {stopOversFlight.length ? (
+                    <motion.div className='searched'>
+                        <motion.h2 variants={fadeIn} initial='hidden' animate='show'>Flight with <span>{stopOversFlight.length - 1}</span> Stopovers from: <span>{stopOversFlight[0].departureAirportId}</span> to: <span>{ removeItem.length ? (lastItem.arrivalAirportId) : ''}</span></motion.h2>
+                        <div className="card-container">
+                            {flightsSearched.map((flight)=> {
+                                return <SearchedFlight show={show2} setShow={setShow2} arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId} /> 
+                            })}
                         </div>
-                    ): ''}
-                
+                    </motion.div>
+                ): ''}
 
                 <motion.h2 variants={fadeIn} initial='hidden' animate='show'>Most Convenient Flights under 1000€ with no Stopovers</motion.h2>
-                <div className="card-container">
+                <motion.div className="card-container">
                     {allFlights.map((flight)=> {
-                        return <Flight arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId} /> 
+                        return <Flight show={show} setShow={setShow} arrival={flight.arrivalAirportId} departure={flight.departureAirportId} id={flight.id} price={flight.price} key={flight.id} airline={flight.airlineId} /> 
                     })}
-                </div>
+                </motion.div>
             </AnimateSharedLayout>
         </div>
     );
