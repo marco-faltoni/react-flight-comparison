@@ -17,6 +17,9 @@
             box-decoration-break: clone;
             
         }
+        @media (max-width: 600px) {
+            padding: 3rem 0rem;
+        }
     }
 
     .card-container {
@@ -67,6 +70,9 @@
             }
             .two h3 span, .three h3 span {
                 font-size: 1.7rem;
+                @media (max-width: 600px) {
+                    font-size: 1.4rem;
+                }
             }
         }
     }

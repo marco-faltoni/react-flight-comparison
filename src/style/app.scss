@@ -28,13 +28,16 @@ h2 {
     font-style: italic;
     color: #333;
     @media (max-width: 600px) {
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
 }
 h3 {
     font-size: 1rem;
     color: #333;
     padding:1.5rem 0rem;
+    @media (max-width: 600px) {
+        font-size: 0.8rem;
+    }
 }
 p{
     font-size: 1.1rem;
